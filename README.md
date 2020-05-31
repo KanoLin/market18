@@ -1,12 +1,22 @@
-# test
+# Market18
 
 
 
 ## QuickStart
 
-<!-- add docs here for user -->
+### init
+```bash
+#fill config
+$ cp .env_EXAMPLE .env 
+$ cp database/config.example.json database/config.json
 
-see [egg docs][egg] for more detail.
+$ npm i
+
+# database migrate
+$ npx sequelize db:migrate
+```
+
+
 
 ### Development
 
@@ -22,12 +32,3 @@ $ open http://localhost:7001/
 $ npm start
 $ npm stop
 ```
-
-### npm scripts
-
-- Use `npm run lint` to check code style.
-- Use `npm test` to run unit test.
-- Use `npm run autod` to auto detect dependencies upgrade, see [autod](https://www.npmjs.com/package/autod) for more detail.
-
-
-[egg]: https://eggjs.org
