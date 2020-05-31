@@ -5,7 +5,7 @@ const utils = {
     return Object.assign({ errmsg: msg, errcode: code }, data);
   },
 
-  random_num: () => {
+  new_captcha: () => {
     return Math.floor(Math.random() * (900000 - 1)) + 100000;
   },
 };

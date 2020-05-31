@@ -56,6 +56,11 @@ module.exports = appInfo => {
     },
   };
 
+  config.validate = {
+    convert: false,
+    // validateRoot: false,
+  };
+
   config.multipart = {
     fileSize: '4mb',
     whitelist: [

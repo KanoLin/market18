@@ -11,7 +11,7 @@ module.exports = {
       avater: { type: STRING(200), allowNull: false, defaultValue: '', },
       birthday: { type: DATEONLY, defaultValue: '1970-01-01', },
       sex: { type: BOOLEAN, allowNull: false, defaultValue: 0, },
-      phone: { type: STRING(15), allowNull: false, },
+      phone: { type: STRING(15), allowNull: false, defaultValue: '12300000000', },
       email: { type: STRING(40), allowNull: false, },
       created_at: DATE,
       updated_at: DATE,
