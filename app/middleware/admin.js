@@ -7,7 +7,7 @@ async function admin(ctx, next) {
 	const token = ctx.get('Authorization');
 	let data;
 	try {
-		data.id = jwt.verify(token, process.env.JWT_KEY);
+		data = jwt.verify(token, process.env.JWT_KEY);
 	} catch (e) {
 		ctx.status = 401;
 		ctx.body = util.make_res('未登录', 401, {});

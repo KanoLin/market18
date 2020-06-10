@@ -16,8 +16,14 @@ module.exports = app => {
 	router.get('/user/login_check', middleware.auth, controller.user.login_check); // 登录状态查询
 	router.post('/user/change_pwd', controller.user.change_pwd); // 修改密码
 
-	
-	
-	
+	// 分类与属性
+	router.post('/category', middleware.admin, controller.category.create); //创建分类
+	router.get('/category', controller.category.index); // 获取分类
+	router.post('/attribute', middleware.admin, controller.attribute.create); // 添加属性
+	router.get('/category/:category_id/attributes', controller.attribute.index); // 获取属性
+	router.post('/attribute/value', middleware.admin, controller.attributeValue.create); // 添加属性值
+	router.get('/attribute/:attribute_id', controller.attributeValue.index); // 获取属性值
+
+
   
 };

@@ -3,7 +3,7 @@
 const Controller = require('egg').Controller;
 const util = require('../util');
 
-class CategroyController extends Controller {
+class CategoryController extends Controller {
 	async create() {
 		const { ctx } = this;
 		const rules = {
@@ -18,7 +18,7 @@ class CategroyController extends Controller {
 			return;
 		}
 
-		const { res, msg } = await ctx.service.categroy.create(ctx.request.data);
+		const { res, msg } = await ctx.service.category.create(ctx.request.body);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});
@@ -31,7 +31,7 @@ class CategroyController extends Controller {
 
 	async index() {
 		const { ctx } = this;
-		const data = await ctx.model.Categroy.findAll({
+		const data = await ctx.model.Category.findAll({
 			attributes: ['id', 'name'],
 			where: { father_id: 0 },
 			include: [{
@@ -58,7 +58,7 @@ class CategroyController extends Controller {
 			ctx.body = util.make_res('参数错误', 400, {});
 			return;
 		}
-		const { res, msg } = await ctx.service.categroy.change(ctx.params.id, ctx.request.data);
+		const { res, msg } = await ctx.service.category.change(ctx.params.id, ctx.request.data);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});
@@ -71,7 +71,7 @@ class CategroyController extends Controller {
 
 	async delete() {
 		const { ctx } = this;
-		const { res, msg } = await ctx.service.categroy.delete(ctx.params.id);
+		const { res, msg } = await ctx.service.category.delete(ctx.params.id);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});
@@ -84,4 +84,4 @@ class CategroyController extends Controller {
 
 }
 
-module.exports = CategroyController;
+module.exports = CategoryController;

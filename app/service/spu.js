@@ -5,14 +5,14 @@ const Service = require('egg').Service;
 
 class SpuService extends Service {
 	async create(data) {
-		const categroy = this.ctx.model.Categroy.findByFk(data.categroy_id);
-		if (!categroy) return { res: false, msg: '分类不存在！' };
+		const category = this.ctx.model.category.findByFk(data.category_id);
+		if (!category) return { res: false, msg: '分类不存在！' };
 		const attrs_num = await this.ctx.model.Attribute.count({ where: { id: { [this.app.Sequelize.Op.in]: data.attrs, } } });
 		if (attrs_num != data.attrs.length) return { res: false, msg: '部分属性不存在！' };
 
 		const spu = await this.ctx.model.Spu.create({
 			name: data.name,
-			categroy_id: data.categroy_id,
+			category_id: data.category_id,
 			spu_pic: JSON.stringify(data.spu_pic),
 		});
 
@@ -40,25 +40,25 @@ class SpuService extends Service {
 		return { res: true, msg: '' };
 	}
 
-	async search(categroy_id, keyword, page, page_num) {
+	async search(category_id, keyword, page, page_num) {
 		let option = {};
 		option.limit = page_num;
 		option.offset = (page - 1) * page_num;
 		const op = this.app.Sequelize.Op;
-		if (categroy_id != 0) {
-			const categroy = await this.ctx.model.Categroy.findByFk(categroy_id);
-			if (!categroy) return { res: false, msg: '分类不存在', data: {} }
-			if (categroy.father_id != 0) {
-				const sons = await categroy.getSons();
+		if (category_id != 0) {
+			const category = await this.ctx.model.category.findByFk(category_id);
+			if (!category) return { res: false, msg: '分类不存在', data: {} }
+			if (category.father_id != 0) {
+				const sons = await category.getSons();
 				let son_ids = [];
 				for (let s of sons) son_ids.push(s.id);
-				option.where = { categroy_id: { [op.in]: son_ids } };
+				option.where = { category_id: { [op.in]: son_ids } };
 			} else 
-				option.where = { categroy_id: categroy_id };
+				option.where = { category_id: category_id };
 		}
 		if (keyword != null)
 			option.where = Object.assign(option.where || {}, { name: { [op.substring]: keyword } });
-		option.include = [{ model: this.ctx.model.Categroy, as: 'categroy' }];
+		option.include = [{ model: this.ctx.model.category, as: 'category' }];
 		option.attribute = [['id', 'spu_id'], 'name', 'spu_pic'];
 		let data = await this.ctx.model.Spu.findAll(option).then(res => {
 			for (let s of res.rows) s.pic = JSON.parse(item.pic);
@@ -76,8 +76,8 @@ class SpuService extends Service {
 			where: { id: spu_id },
 			include: [
 				{
-					model: this.ctx.model.Categroy,
-					as: 'categroy',
+					model: this.ctx.model.category,
+					as: 'category',
 					attributes: ['id', 'name', 'father_id']
 				},
 				{

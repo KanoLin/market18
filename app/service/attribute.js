@@ -4,11 +4,11 @@ const Service = require('egg').Service;
 
 class AttributeService extends Service {
 	async create(data) {
-		const categroy = await this.ctx.model.Categroy.findByFk(data.categroy_id);
-		if (categroy == null) {
+		const category = await this.ctx.model.Category.findByPk(data.category_id);
+		if (category == null) {
 			return { res: false, msg: '父分类不存在！' };
 		}
-		const a = await categroy.hasAttribute({ name: data.name });
+		const a = await this.ctx.model.Attribute.findOne({ where: { name: data.name } });
 		if (a != null) {
 			return { res: false, msg: '属性名重复！' };
 		}
@@ -16,20 +16,20 @@ class AttributeService extends Service {
 		return { res: true, msg: '' };
 	}
 
-	async index(categroy_id) {
-		const categroy = await this.ctx.model.Categroy.findByFk(categroy_id);
-		if (categroy == null) {
+	async index(category_id) {
+		const category = await this.ctx.model.Category.findByPk(category_id);
+		if (category == null) {
 			return { res: false, msg: '父分类不存在！',data:{} };
 		}
-		const as = await this.ctx.model.Attribute.findAll({
+		const attrs = await this.ctx.model.Attribute.findAll({
 			attributes: ['id', 'name',],
-			where: { categroy_id: categroy_id }
+			where: { category_id: category_id }
 		});
-		return { res: true, msg: '', data: as.toJSON() };
+		return { res: true, msg: '', data: attrs };
 	}
 
 	async delete(id) {
-		const attribute = await this.ctx.model.Attribute.findByFk(id);
+		const attribute = await this.ctx.model.Attribute.findByPk(id);
 		if (attribute == null) {
 			return { res: false, msg: '属性不存在！' };
 		}

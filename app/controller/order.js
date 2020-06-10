@@ -68,7 +68,7 @@ class OrderController extends Controller {
 			ctx.body = util.make_res('参数错误', 400, {});
 			return;
 		}
-		const { res, msg } = await ctx.service.order.status_update(ctx.request.params.id, ctx.request.data);
+		const { res, msg } = await ctx.service.order.status_update(ctx.params.id, ctx.request.data);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});
@@ -82,7 +82,7 @@ class OrderController extends Controller {
 
 	async detail() {
 		const { ctx } = this;
-		const { res, msg, data } = await ctx.service.order.detail(ctx.request.params.id);
+		const { res, msg, data } = await ctx.service.order.detail(ctx.params.id);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, { data });

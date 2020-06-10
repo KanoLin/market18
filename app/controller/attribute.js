@@ -17,7 +17,7 @@ class AttributeController extends Controller {
 			ctx.body = util.make_res('参数错误', 400, {});
 			return;
 		}
-		const { res, msg } = await ctx.service.attribute.create(ctx.reaquest.body);
+		const { res, msg } = await ctx.service.attribute.create(ctx.request.body);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});
@@ -30,7 +30,7 @@ class AttributeController extends Controller {
 	
 	async index() {
 		const { ctx } = this;
-		const { res, msg, data } = await ctx.service.attribute.index(ctx.reaquest.params.category_id);
+		const { res, msg, data } = await ctx.service.attribute.index(ctx.params.category_id);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});

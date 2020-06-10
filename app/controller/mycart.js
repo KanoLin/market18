@@ -33,7 +33,7 @@ class MycartController extends Controller {
 	}
 
 	async delete() {
-		await this.ctx.service.mycart.delete(this.ctx.request.params.id);
+		await this.ctx.service.mycart.delete(this.ctx.params.id);
 		ctx.status = 200;
 		ctx.body = util.make_res('', 0, {});
 		return;
