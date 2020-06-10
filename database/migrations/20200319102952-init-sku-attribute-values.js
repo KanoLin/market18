@@ -12,6 +12,14 @@ module.exports = {
           key: 'id',
         },
       },
+      attribute_id: {
+        type: INTEGER,
+        allowNull: false,
+        references: {
+          model: 'attributes',
+          key: 'id',
+        },
+      },
       attribute_value_id: {
         type: INTEGER,
         allowNull: false,

@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const { INTEGER, DATE, TEXT, STRING } = Sequelize;
+    const { INTEGER, DATE, TEXT, STRING, BOOLEAN } = Sequelize;
     await queryInterface.createTable('addresses', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       user_id: {
@@ -14,6 +14,7 @@ module.exports = {
         },
         onDelete:'CASCADE'
       },
+      default: { type: BOOLEAN, allowNull: false, defaultValue: false, },
       province:{ type: STRING(20), allowNull: false, },
       city: { type: STRING(20), allowNull: false, },
       county: { type: STRING(20), allowNull: false, },

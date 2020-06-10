@@ -16,6 +16,14 @@ module.exports = app => {
         key: 'id',
       },
     },
+    attribute_id: {
+      type: INTEGER,
+      allowNull: false,
+      references: {
+        model: 'attributes',
+        key: 'id',
+      },
+    },
     attribute_value_id: {
       type: INTEGER,
       allowNull: false,
@@ -33,6 +41,8 @@ module.exports = app => {
   SkuAttributeValue.associate = () => {
     app.model.SkuAttributeValue.belongsTo(app.model.AttributeValue, { as: 'values', foreignKey: 'attribute_value_id' });
     app.model.SkuAttributeValue.belongsTo(app.model.Sku, { as: 'skus', foreignKey: 'sku_id' });
+    app.model.SkuAttributeValue.belongsTo(app.model.Attribute, { as: 'attribute', foreignKey: 'attribute_id' });
+
   };
 
   return SkuAttributeValue;

@@ -3,7 +3,7 @@
 const moment = require('moment');
 
 module.exports = app => {
-  const { STRING, DATE, INTEGER } = app.Sequelize;
+  const { STRING, DATE, INTEGER, BOOLEAN, TEXT } = app.Sequelize;
 
   const Address = app.model.define('address', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
@@ -15,6 +15,7 @@ module.exports = app => {
         key:'id',
       },
     },
+    default: { type: BOOLEAN, allowNull: false, defaultValue: false, },
     province:{ type: STRING(20), allowNull: false, },
     city: { type: STRING(20), allowNull: false, },
     county: { type: STRING(20), allowNull: false, },

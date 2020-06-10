@@ -7,14 +7,6 @@ module.exports = app => {
 
   const Category = app.model.define('category', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    user_id: {
-      type: INTEGER,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key:'id',
-      },
-    },
     name: { type: STRING(30), allowNull: false, },
     father_id: { type: INTEGER, defaultValue: 0, allowNull: false, },
     created_at: {

@@ -17,6 +17,7 @@ class UserController extends Controller {
 			this.ctx.status = 401;
 			this.ctx.body = util.make_res('用户或密码错误', 401, {});
 		}
+		return;
 	}
 
 	// 注册
@@ -41,7 +42,7 @@ class UserController extends Controller {
 			ctx.body = util.make_res('验证码错误', 400, {});
 			return;
 		}
-		const { res } = await ctx.service.user.register(ctx.requext.body);
+		const { res } = await ctx.service.user.register(ctx.request.body);
 		if (res) {
 			ctx.status = 200;
 			ctx.body = util.make_res('注册成功', 0, {});
@@ -49,6 +50,7 @@ class UserController extends Controller {
 			ctx.status = 400;
 			ctx.body = util.make_res('该邮箱已被注册', 400, {});
 		}
+		return;
 	}
 
 	// 邮件验证码
@@ -78,6 +80,7 @@ class UserController extends Controller {
 
 		ctx.status = 200;
 		ctx.body = util.make_res('验证码发送成功', 0, {});
+		return;
 	}
 
 	// 修改密码
@@ -85,11 +88,11 @@ class UserController extends Controller {
 		const { ctx, app } = this;
 		const rules = {
 			email: { type: 'email' },
-			captcha: { type: 'string' },
+			code: { type: 'string' },
 			new_pwd: { type: 'string' },
 		};
 		try {
-			ctx.validate(roles);
+			ctx.validate(rules);
 		} catch (e) {
 			ctx.status = 400;
 			ctx.body = util.make_res('参数错误', 400, {});
@@ -109,6 +112,7 @@ class UserController extends Controller {
 			ctx.status = 400;
 			ctx.body = util.make_res('该邮箱不存在', 400, {});
 		}
+		return;
 	}
 
 	// 完善个人信息
@@ -122,7 +126,7 @@ class UserController extends Controller {
 			phone: { type: 'string', max: 15, required: false },
 		}
 		try {
-			ctx.validate(roles);
+			ctx.validate(rules);
 		} catch (e) {
 			ctx.status = 400;
 			ctx.body = util.make_res('参数错误', 400, {});
@@ -132,6 +136,7 @@ class UserController extends Controller {
 		await ctx.current_user.update(data);
 		ctx.status = 200;
 		ctx.body = util.make_res('修改成功', 0, {});
+		return;
 	}
 
 	// 获取用户信息
@@ -150,12 +155,14 @@ class UserController extends Controller {
 		};
 		ctx.status = 200;
 		ctx.body = util.make_res('', 0, { data });
+		return;
 	}
 
 	// 登录状态查询
 	async login_check() {
 		this.ctx.status = 200;
 		this.ctx.body = util.make_res('已登录', 0, {});
+		return;
 	}
 }
 

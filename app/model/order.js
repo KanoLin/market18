@@ -3,7 +3,7 @@
 const moment = require('moment');
 
 module.exports = app => {
-  const { INTEGER, DATE, BOOLEAN } = app.Sequelize;
+  const { INTEGER, DATE, BOOLEAN, DECIMAL } = app.Sequelize;
 
   const Order = app.model.define('order', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
@@ -32,6 +32,7 @@ module.exports = app => {
       },
     },
     num: { type: INTEGER, allowNull: false, },
+    price:{ type: DECIMAL(12,2), allowNull: false, },
     anonymous: { type: BOOLEAN, allowNull: false, defaultValue: false, },
     status: { type: INTEGER, allowNull: false, defaultValue: 0 },
     created_at: {
@@ -65,7 +66,8 @@ module.exports = app => {
     app.model.Order.belongsTo(app.model.User, { as: 'user', foreignKey: 'user_id' });
     app.model.Order.belongsTo(app.model.Sku, { as: 'sku', foreignKey: 'sku_id' });
     app.model.Order.belongsTo(app.model.Address, { as: 'address', foreignKey: 'address_id' });
-    app.model.Order.hasMany(app.model.OrderStatus, { as: 'status', foreignKey: 'order_id' });
+    app.model.Order.hasMany(app.model.OrderStatus, { as: 'statuses', foreignKey: 'order_id' });
+    app.model.Order.hasMany(app.model.Comment, { as: 'comment', foreignKey: 'order_id' });
   };
 
   return Order;
