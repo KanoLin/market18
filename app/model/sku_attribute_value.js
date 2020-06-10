@@ -7,7 +7,6 @@ module.exports = app => {
 
   const SkuAttributeValue = app.model.define('sku_attribute_value', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: STRING(255), allowNull: false, },
     sku_id: {
       type: INTEGER,
       allowNull: false,

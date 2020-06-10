@@ -33,7 +33,8 @@ class AddressController extends Controller {
 
 	async index() {
 		const { ctx } = this;
-		const data = await ctx.model.Address.findAll({ where: { user_id: ctx.current_user.id } });
+		const user_id = ctx.current_user.id;
+		const data = await ctx.model.Address.findAll({ where: { user_id: user_id } });
 		ctx.status = 200;
 		ctx.body = util.make_res('', 0, { data });
 		return;
@@ -59,7 +60,7 @@ class AddressController extends Controller {
 			return;
 		}
 
-		await ctx.service.address.change(ctx.params.id, ctx.current_user.id, ctx.request.body);
+		await ctx.service.address.change(ctx.params.address_id, ctx.current_user.id, ctx.request.body);
 
 		ctx.status = 200;
 		ctx.body = util.make_res('修改成功', 0, {});
@@ -68,7 +69,7 @@ class AddressController extends Controller {
 
 	async delete() {
 		const { ctx } = this;
-		await ctx.service.address.destroy(ctx.params.id);
+		await ctx.service.address.destroy(ctx.params.address_id);
 		ctx.status = 200;
 		ctx.body = util.make_res('删除成功', 0, {});
 		return;

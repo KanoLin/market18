@@ -9,15 +9,15 @@ class SpuController extends Controller {
 		const rules = {
 			category_id: 'int',
 			name: { type: 'string', max: 255 },
-			spu_pic: { type: 'array', itemType: 'url' },
+			spu_pic: 'url',
 			attrs: { type: 'array', itemType: 'int' },
 			skus: {
 				type: 'array', itemType: 'object', rule: {
 					name: { type: 'string', max: 255 },
 					price: 'number',
 					stock: 'int',
-					sku_pic: { type: 'array', itemType: 'url' },
-					des_pic: { type: 'array', itemType: 'url' },
+					sku_pic: 'url?',
+					des_pic: 'url?',
 					v: { type: 'array', itemType: 'int' },
 				}
 			}
@@ -30,7 +30,7 @@ class SpuController extends Controller {
 			return;
 		}
 
-		const { res, msg } = this.ctx.service.spu.create(ctx.request.data);
+		const { res, msg } =await this.ctx.service.spu.create(ctx.request.body);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});
@@ -73,9 +73,6 @@ class SpuController extends Controller {
 		}
 		return;
 	}
-
-	
-
 
 }
 

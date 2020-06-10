@@ -15,6 +15,11 @@ async function admin(ctx, next) {
 	}
 
 	ctx.current_user = await ctx.model.User.findByPk(data.id);
+	if (!ctx.current_user) {
+		ctx.status = 401;
+		ctx.body = util.make_res('请重新登录', 401, {});
+		return;
+	}
 	if (!ctx.current_user.identity){
 		ctx.status = 401;
 		ctx.body = util.make_res('没有权限', 401, {});

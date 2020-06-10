@@ -7,6 +7,17 @@ const util = require('../util');
 class UserController extends Controller {
 	// 登录
 	async login() {
+		const rules = {
+			email: { type: 'email' },
+			password: { type: 'string' },
+		};
+		try {
+			ctx.validate(rules);
+		} catch (e) {
+			ctx.status = 400;
+			ctx.body = util.make_res('参数错误', 400, {});
+			return;
+		}
 		const email = this.ctx.request.body.email;
 		const pwd = this.ctx.request.body.password;
 		const { res, data } = await this.ctx.service.user.login(email, pwd);

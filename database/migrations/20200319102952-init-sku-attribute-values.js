@@ -4,6 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const { INTEGER } = Sequelize;
     await queryInterface.createTable('sku_attribute_value', {
+      id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       sku_id: {
         type: INTEGER,
         allowNull: false,
@@ -30,12 +31,6 @@ module.exports = {
       },
     }, {
       timestamps: false,
-    });
-    await queryInterface.addIndex(
-      'sku_attribute_value',
-      {
-        unique: true,
-        fields:['sku_id','attribute_value_id'] 
     });
   },
 

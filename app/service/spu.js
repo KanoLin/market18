@@ -5,7 +5,7 @@ const Service = require('egg').Service;
 
 class SpuService extends Service {
 	async create(data) {
-		const category = this.ctx.model.category.findByFk(data.category_id);
+		const category = this.ctx.model.Category.findByPk(data.category_id);
 		if (!category) return { res: false, msg: '分类不存在！' };
 		const attrs_num = await this.ctx.model.Attribute.count({ where: { id: { [this.app.Sequelize.Op.in]: data.attrs, } } });
 		if (attrs_num != data.attrs.length) return { res: false, msg: '部分属性不存在！' };
@@ -15,7 +15,6 @@ class SpuService extends Service {
 			category_id: data.category_id,
 			spu_pic: JSON.stringify(data.spu_pic),
 		});
-
 		for (let _sku of data.skus) {
 			if (data.attrs.length != _sku.v.length) return { res: false, msg: 'sku属性值数量与属性数量不匹配！' };
 			const v_num = await this.ctx.model.AttributeValue.count({ where: { id: { [this.app.Sequelize.Op.in]: _sku.v, } } });
@@ -29,10 +28,10 @@ class SpuService extends Service {
 				des_pic: JSON.stringify(_sku.des_pic),
 			});
 			for (let i = 0; i < _sku.v.length; i++) {
-				let v = await this.ctx.model.SkuAttributeValue.create({
-					sku_id: sku.id,
+				await this.ctx.model.SkuAttributeValue.create({
 					attribute_id: data.attrs[i],
 					attribute_value_id: _sku.v[i],
+					sku_id: sku.id,
 				});
 			}
 		}
@@ -46,7 +45,7 @@ class SpuService extends Service {
 		option.offset = (page - 1) * page_num;
 		const op = this.app.Sequelize.Op;
 		if (category_id != 0) {
-			const category = await this.ctx.model.category.findByFk(category_id);
+			const category = await this.ctx.model.category.findByPk(category_id);
 			if (!category) return { res: false, msg: '分类不存在', data: {} }
 			if (category.father_id != 0) {
 				const sons = await category.getSons();
@@ -119,7 +118,7 @@ class SpuService extends Service {
 		let attrs = Array();
 		const op = this.app.Sequelize.Op;
 		for (let aid of attr_ids) {
-			const attribute = this.ctx.model.Attribute.findByFk(aid);
+			const attribute = this.ctx.model.Attribute.findByPk(aid);
 			const values = this.ctx.model.AttributeValue.findAll({
 				attributes: ['id', 'name'],
 				where: {
