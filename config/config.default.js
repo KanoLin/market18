@@ -57,7 +57,7 @@ module.exports = appInfo => {
   };
 
   config.validate = {
-    convert: false,
+    convert: true,
     // validateRoot: false,
   };
 

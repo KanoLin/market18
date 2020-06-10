@@ -14,7 +14,10 @@ module.exports = app => {
 	router.get('/user/profile', middleware.auth, controller.user.get_info); // 获取个人信息
 	router.put('/user/submit_profile', middleware.auth, controller.user.update_info); // 修改个人信息
 	router.get('/user/login_check', middleware.auth, controller.user.login_check); // 登录状态查询
+	router.post('/user/change_pwd', controller.user.change_pwd); // 修改密码
 
+	
+	
 	
   
 };

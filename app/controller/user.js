@@ -104,7 +104,7 @@ class UserController extends Controller {
 			ctx.body = util.make_res('验证码错误', 400, {});
 			return;
 		}
-		await ctx.service.user.change_pwd(ctx.request.email, ctx.request.new_pwd);
+		const res = await ctx.service.user.change_pwd(ctx.request.body.email, ctx.request.body.new_pwd);
 		if (res) {
 			ctx.status = 200;
 			ctx.body = util.make_res('修改成功', 0, {});
@@ -120,20 +120,21 @@ class UserController extends Controller {
 		const { ctx } = this;
 		const rules = {
 			username: { type: 'string', max: 30, require: false },
-			avatar: { type: 'string', max: 200, required: false },
+			avatar: { type: 'url', required: false },
 			birthday: { type: 'date', required: false },
-			sex: { type: 'enum', values: [0, 1], require: false },
+			sex: { type: 'bool', require: false },
 			phone: { type: 'string', max: 15, required: false },
 		}
 		try {
 			ctx.validate(rules);
 		} catch (e) {
+			console.log(e);
 			ctx.status = 400;
 			ctx.body = util.make_res('参数错误', 400, {});
 			return;
 		}
 
-		await ctx.current_user.update(data);
+		ctx.current_user.update(ctx.request.body);
 		ctx.status = 200;
 		ctx.body = util.make_res('修改成功', 0, {});
 		return;
