@@ -20,12 +20,12 @@ module.exports = app => {
     stock: { type: INTEGER, allowNull: false, defaultValue: 0, },
     sales: { type: INTEGER, allowNull: false, defaultValue: 0, },
     sku_pic: {
-      type: JSON,
+      type: STRING,
       allowNull: false,
       comment:'主轮播图',
     },
     des_pic: {
-      type: JSON,
+      type: STRING,
       allowNull: false,
       comment:'详情图',
     },
@@ -59,6 +59,7 @@ module.exports = app => {
   Sku.associate = () => {
     app.model.Sku.belongsTo(app.model.Spu, { as: 'spu', foreignKey: 'spu_id' });
     app.model.Sku.belongsToMany(app.model.AttributeValue, { as: 'values', through: app.model.SkuAttributeValue });
+    app.model.Sku.hasMany(app.model.SkuAttributeValue, { as: 'aavs', foreignKey: 'sku_id' });
     app.model.Sku.hasMany(app.model.Order, { as: 'orders', foreignKey: 'sku_id' });
     app.model.Sku.hasMany(app.model.Comment, { as: 'comments', foreignKey: 'sku_id' });
   };

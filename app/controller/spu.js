@@ -63,7 +63,7 @@ class SpuController extends Controller {
 
 	async detail() {
 		const { ctx } = this;
-		const { res, msg, date } = await ctx.service.spu.detail(ctx.request.params.spu_id);
+		const { res, msg, data } = await ctx.service.spu.detail(ctx.params.spu_id);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});

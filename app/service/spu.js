@@ -13,7 +13,7 @@ class SpuService extends Service {
 		const spu = await this.ctx.model.Spu.create({
 			name: data.name,
 			category_id: data.category_id,
-			spu_pic: JSON.stringify(data.spu_pic),
+			spu_pic: data.spu_pic,
 		});
 		for (let _sku of data.skus) {
 			if (data.attrs.length != _sku.v.length) return { res: false, msg: 'sku属性值数量与属性数量不匹配！' };
@@ -24,8 +24,8 @@ class SpuService extends Service {
 				name: _sku.name,
 				price: _sku.price,
 				stock: _sku.stock,
-				sku_pic: JSON.stringify(_sku.sku_pic),
-				des_pic: JSON.stringify(_sku.des_pic),
+				sku_pic: _sku.sku_pic,
+				des_pic: _sku.des_pic,
 			});
 			for (let i = 0; i < _sku.v.length; i++) {
 				await this.ctx.model.SkuAttributeValue.create({
@@ -75,7 +75,7 @@ class SpuService extends Service {
 			where: { id: spu_id },
 			include: [
 				{
-					model: this.ctx.model.category,
+					model: this.ctx.model.Category,
 					as: 'category',
 					attributes: ['id', 'name', 'father_id']
 				},
@@ -94,46 +94,42 @@ class SpuService extends Service {
 		});
 		if (spu == null) return { res: false, msg: '商品不存在！', data: {} };
 		spu = spu.toJSON();
-		spu.spu_pic = JSON.parse(spu_pic);
 		let attr_ids = Array();
 		let value_ids = Array();
 		
 		for (let sku of spu.skus) {
-			sku.sku_pic = JSON.parse(sku.sku_pic);
-			sku.des_pic = JSON.parse(sku.des_pic);
 			let attrs = Array();
 			let v = Array();
 			for (let aav of sku.aavs) {
 				attr_ids.push(aav.attribute_id);
-				value_ids.push(avv.attribute_value_id);
+				value_ids.push(aav.attribute_value_id);
 				attrs.push(aav.attribute_id);
 				v.push(aav.attribute_value_id);
 			}
 			sku.attrs = attrs;
 			sku.v = v;
-			delete sku.avv;
+			delete sku.aavs;
 		}
 		attr_ids = Array.from(new Set(attr_ids));
-		value_ids = Array.from(new Set(values_ids));
-		let attrs = Array();
-		const op = this.app.Sequelize.Op;
+		value_ids = Array.from(new Set(value_ids));
+		let attrs2 = Array();
 		for (let aid of attr_ids) {
-			const attribute = this.ctx.model.Attribute.findByPk(aid);
-			const values = this.ctx.model.AttributeValue.findAll({
+			const attribute = await this.ctx.model.Attribute.findByPk(aid);
+			const values = await this.ctx.model.AttributeValue.findAll({
 				attributes: ['id', 'name'],
 				where: {
-					attribute_id: attribute_id,
-					[op.in]: value_ids
+					attribute_id: aid,
+					id: { [this.app.Sequelize.Op.in]: value_ids }
 				}
 			});
 			let attr = {
 				id: attribute.id,
 				name: attribute.name,
-				values: values.toJSON()
+				values: values
 			}
-			attrs.push(attr);
+			attrs2.push(attr);
 		}
-		spu.attrs = attrs;
+		spu.attrs = attrs2;
 		return { res: true, msg: '', data: spu };
 	}
 

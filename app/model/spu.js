@@ -17,7 +17,7 @@ module.exports = app => {
       },
     },
     spu_pic: {
-      type: JSON,
+      type: STRING,
       allowNull: false,
       comment:'主图',
     },
