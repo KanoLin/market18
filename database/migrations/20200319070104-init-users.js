@@ -8,7 +8,7 @@ module.exports = {
       username: { type: STRING(30), allowNull: false, defaultValue: '新用户',},
       password: { type: STRING(255), allowNull: false, },
       identity: { type: INTEGER, defaultValue: 0, allowNull: false, },
-      avater: { type: STRING(200), allowNull: false, defaultValue: '', },
+      avatar: { type: STRING(200), allowNull: false, defaultValue: '', },
       birthday: { type: DATEONLY, defaultValue: '1970-01-01', },
       sex: { type: BOOLEAN, allowNull: false, defaultValue: 0, },
       phone: { type: STRING(15), allowNull: false, defaultValue: '12300000000', },

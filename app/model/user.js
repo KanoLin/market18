@@ -10,9 +10,9 @@ module.exports = app => {
     username: STRING(30),
 	  password: STRING(128),
 	  identity: INTEGER,
-  	avater: STRING(200),
+  	avatar: STRING(200),
 	  birthday: DATEONLY,
-    sex: BOOLEAN,
+    sex: INTEGER,
     phone: STRING(15),
     email: STRING(40),
     created_at: {
