@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const { INTEGER, DECIMAL, DATE, STRING, JSON } = Sequelize;
+    const { INTEGER, DECIMAL, DATE, STRING } = Sequelize;
     await queryInterface.createTable('skus', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       name: { type: STRING(255), allowNull: false, },
@@ -18,12 +18,12 @@ module.exports = {
       stock: { type: INTEGER, allowNull: false, defaultValue: 0, },
       sales: { type: INTEGER, allowNull: false, defaultValue: 0, },
       sku_pic: {
-        type: JSON,
+        type: STRING,
         allowNull: false,
         comment:'主轮播图',
       },
       des_pic: {
-        type: JSON,
+        type: STRING,
         allowNull: false,
         comment:'详情图',
       },

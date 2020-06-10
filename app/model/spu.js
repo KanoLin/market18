@@ -3,7 +3,7 @@
 const moment = require('moment');
 
 module.exports = app => {
-  const { STRING, DATE, INTEGER, JSON } = app.Sequelize;
+  const { STRING, DATE, INTEGER } = app.Sequelize;
 
   const Spu = app.model.define('spu', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },

@@ -3,7 +3,7 @@
 const moment = require('moment');
 
 module.exports = app => {
-  const { INTEGER, DECIMAL, DATE, STRING, JSON } = app.Sequelize;
+  const { INTEGER, DECIMAL, DATE, STRING } = app.Sequelize;
 
   const Sku = app.model.define('sku', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },

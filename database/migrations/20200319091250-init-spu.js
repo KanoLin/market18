@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const { INTEGER, DATE, STRING, JSON } = Sequelize;
+    const { INTEGER, DATE, STRING } = Sequelize;
     await queryInterface.createTable('spus', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       name: { type: STRING(255), allowNull: false, },
@@ -15,7 +15,7 @@ module.exports = {
         },
       },
       spu_pic: {
-        type: JSON,
+        type: STRING,
         allowNull: false,
         comment:'主图',
       },

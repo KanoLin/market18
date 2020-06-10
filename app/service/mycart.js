@@ -15,50 +15,54 @@ class MycartService extends Service {
 	}
 
 	async index(user_id) {
-		const data = await this.ctx.model.Mycart.findAll({
-			attribtues: ['id', 'num'],
+		const carts = await this.ctx.model.Mycart.findAll({
+			attributes: ['id', 'num'],
 			where: { user_id: user_id },
 			include: [{
 				model: this.ctx.model.Sku,
 				as: 'sku',
-				attributes: ['id', 'price', 'stock', 'sku_pic', 'des_pic', 'sales'],
+				attributes: ['id', 'name', 'price', 'stock', 'sku_pic'],
 				include: [{
 					model: this.ctx.model.SkuAttributeValue,
 					as: 'aavs',
 					include: [
 						{
 							model: this.ctx.model.Attribute,
-							as: 'attribute'
+							as: 'attribute',
+							attributes:['id','name']
 						},
 						{
 							model: this.ctx.model.AttributeValue,
-							as: 'values'
+							as: 'values',
+							attributes:['id','name'],
 						}
 					]
 				}]
 			}]
-		}).then(res => {
-			if (res == []) return [];
-			for (let mc of res) {
-				let attrs = [];
-				let v = [];
-				for (let aav of mc.sku.aavs) {
-					attrs.push(aav.attribute.name);
-					v.push(aav.values.name);
-				}
-				mc = mc.toJSON();
-				delete mc.sku.aavs;
-				mc.sku.attrs = attrs;
-				mc.sku.v = v;
-			}
-			return res;
 		});
-
+		if (carts == []) return [];
+		let data=[]
+		for (let mc of carts) {
+			let attrs = [];
+			let v = [];
+			for (let aav of mc.sku.aavs) {
+				attrs.push(aav.attribute.name);
+				v.push(aav.values.name);
+			}
+			let d=mc.toJSON();
+			delete d.sku.aavs;
+			d.sku.attrs = attrs;
+			d.sku.v = v;
+			data.push(d);
+			
+		}
 		return data;
+
 	}
 
 	async delete() {
-		await this.ctx.model.Mycart.findByFk(this.ctx.request.params.id).destroy();
+		const mc = await this.ctx.model.Mycart.findByPk(this.ctx.params.id);
+		mc.destroy();
 		return;
 	}
 

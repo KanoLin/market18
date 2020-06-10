@@ -134,7 +134,7 @@ class UserController extends Controller {
 			username: { type: 'string', max: 30, require: false },
 			avatar: { type: 'url', required: false },
 			birthday: { type: 'date', required: false },
-			sex: { type: 'bool', require: false },
+			sex: { type: 'int', require: false },
 			phone: { type: 'string', max: 15, required: false },
 		}
 		try {
