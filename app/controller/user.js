@@ -7,6 +7,7 @@ const util = require('../util');
 class UserController extends Controller {
 	// 登录
 	async login() {
+		const { ctx } = this;
 		const rules = {
 			email: { type: 'email' },
 			password: { type: 'string' },
@@ -18,15 +19,15 @@ class UserController extends Controller {
 			ctx.body = util.make_res('参数错误', 400, {});
 			return;
 		}
-		const email = this.ctx.request.body.email;
-		const pwd = this.ctx.request.body.password;
-		const { res, data } = await this.ctx.service.user.login(email, pwd);
+		const email = ctx.request.body.email;
+		const pwd = ctx.request.body.password;
+		const { res, data } = await ctx.service.user.login(email, pwd);
 		if (res) {
-			this.ctx.status = 200;
-			this.ctx.body = util.make_res('登录成功', 0, data);
+			ctx.status = 200;
+			ctx.body = util.make_res('登录成功', 0, data);
 		} else {
-			this.ctx.status = 401;
-			this.ctx.body = util.make_res('用户或密码错误', 401, {});
+			ctx.status = 401;
+			ctx.body = util.make_res('用户或密码错误', 401, {});
 		}
 		return;
 	}
