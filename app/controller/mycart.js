@@ -26,7 +26,8 @@ class MycartController extends Controller {
 	}
 
 	async index() {
-		const data=await this.ctx.service.index(ctx.current_user.id);
+		const { ctx } = this;
+		const data=await ctx.service.mycart.index(ctx.current_user.id);
 		ctx.status = 200;
 		ctx.body = util.make_res('', 0, { data });
 		return;
@@ -34,8 +35,8 @@ class MycartController extends Controller {
 
 	async delete() {
 		await this.ctx.service.mycart.delete(this.ctx.params.id);
-		ctx.status = 200;
-		ctx.body = util.make_res('', 0, {});
+		this.ctx.status = 200;
+		this.ctx.body = util.make_res('', 0, {});
 		return;
 	}
 

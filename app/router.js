@@ -39,6 +39,8 @@ module.exports = app => {
 	router.post('/cart', middleware.auth, controller.mycart.create);
 	router.get('/cart', middleware.auth, controller.mycart.index);
 	router.delete('/cart/:id', middleware.auth, controller.mycart.delete);
+	
+
 
 
 
