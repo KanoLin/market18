@@ -62,7 +62,7 @@ module.exports = appInfo => {
   };
 
   config.multipart = {
-    fileSize: '4mb',
+    fileSize: '5mb',
     whitelist: [
       '.png',
       '.jpg',

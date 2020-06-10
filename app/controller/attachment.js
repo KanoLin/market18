@@ -11,21 +11,21 @@ const pump = require('pump');
 
 class AttachmentController extends Controller {
 	async upload() {
-		const { ctx } = this.ctx;
+		const { ctx } = this;
 		let urls = Array();
 		let stream;
 		const pic_dir = process.env.PIC_DIR;
 		if (!fs.existsSync(pic_dir)) fs.mkdirSync(pic_dir);
-        // 循环获取数据流
+        const parts = ctx.multipart();
         while ((stream = await parts()) != null) {
             if (!stream.filename) continue;
             const filename_orign = stream.filename;
 			const timestamp = moment().format('YYMMDD_hhmmss');
 			const filename = timestamp+'_'+md5(filename_orign)+path.extname(filename_orign).toLocaleLowerCase();
 			
-            let target = path.join(pic_dir,filename);
+			let target = path.join(pic_dir, filename);
 			try {
-				let write_stream = Fs.createWriteStream(target);
+				let write_stream = fs.createWriteStream(target);
 				await pump(stream, write_stream);
 			}
 			catch (e) {

@@ -34,7 +34,14 @@ module.exports = app => {
 	router.post('/item', middleware.admin, controller.spu.create);
 	router.get('/item/:spu_id', controller.spu.detail);
 
-	
+
+
+
+	// 附件
+	router.post('/attachment/upload', controller.attachment.upload); // 上传图片
+
+
+
 
   
 };
