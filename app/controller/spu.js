@@ -51,7 +51,7 @@ class SpuController extends Controller {
 		const page = query.page || 1;
 		const page_num = query.page_num || 4;
 
-		const { res, msg, data } = await ctx.service.spu.search(parseInt(category_id), keyword, parseInt(top), parseInt(page), parseInt(page_num));
+		const { res, msg, data } = await ctx.service.spu.search(category_id, keyword, parseInt(top), parseInt(page), parseInt(page_num));
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});

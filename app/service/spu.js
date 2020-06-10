@@ -50,7 +50,7 @@ class SpuService extends Service {
 		// 	});
 		// }
 
-		if (category_id != null) {
+		if (category_id) {
 			const category = await this.ctx.model.Category.findByPk(category_id);
 			if (!category) return { res: false, msg: '分类不存在', data: {} }
 			if (category.father_id != 0) {
@@ -61,7 +61,7 @@ class SpuService extends Service {
 			} else 
 				option.where = { category_id: category_id };
 		}
-		if (keyword != null)
+		if (keyword)
 			option.where = Object.assign(option.where || {}, { name: { [op.substring]: keyword } });
 		option.include = [{ model: this.ctx.model.Category, as: 'category' }];
 		option.attributes = [['id', 'spu_id'], 'name', 'spu_pic'];
