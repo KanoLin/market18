@@ -39,13 +39,19 @@ class SpuService extends Service {
 		return { res: true, msg: '' };
 	}
 
-	async search(category_id, keyword, page, page_num) {
+	async search(category_id, keyword, top, page, page_num) {
 		let option = {};
 		option.limit = page_num;
 		option.offset = (page - 1) * page_num;
 		const op = this.app.Sequelize.Op;
-		if (category_id != 0) {
-			const category = await this.ctx.model.category.findByPk(category_id);
+		// if (top != null) {
+		// 	const skus = await this.ctx.model.Sku.findAll({
+		// 		attributes:[['id','spu_id'],['sku_pic','spu_pic']]
+		// 	});
+		// }
+
+		if (category_id != null) {
+			const category = await this.ctx.model.Category.findByPk(category_id);
 			if (!category) return { res: false, msg: '分类不存在', data: {} }
 			if (category.father_id != 0) {
 				const sons = await category.getSons();
@@ -57,16 +63,19 @@ class SpuService extends Service {
 		}
 		if (keyword != null)
 			option.where = Object.assign(option.where || {}, { name: { [op.substring]: keyword } });
-		option.include = [{ model: this.ctx.model.category, as: 'category' }];
-		option.attribute = [['id', 'spu_id'], 'name', 'spu_pic'];
-		let data = await this.ctx.model.Spu.findAll(option).then(res => {
-			for (let s of res.rows) s.pic = JSON.parse(item.pic);
-			return res.row;
-		});
-
-		const price = await this.ctx.model.Sku.findOne({ where: { spu_id: data[0].spu_id } }).price;
-		data.price = price;
-		return { res: true, msg: '', data };
+		option.include = [{ model: this.ctx.model.Category, as: 'category' }];
+		option.attributes = [['id', 'spu_id'], 'name', 'spu_pic'];
+		let spus = await this.ctx.model.Spu.findAll(option);
+		if (spus == null) return { res: false, msg: '', data:{} };
+		let data = [];
+		for (let s of spus) { 
+			s = s.toJSON();
+			let ss = await this.ctx.model.Sku.findOne({ where: { spu_id: s.spu_id } });
+			s.price = ss.price;
+			s.category = s.category.name;
+			data.push(s);
+		}
+		return { res: true, msg: '', data: data };
 	}
 
 	async detail(spu_id) {

@@ -33,6 +33,7 @@ module.exports = app => {
 	// 商品
 	router.post('/item', middleware.admin, controller.spu.create);
 	router.get('/item/:spu_id', controller.spu.detail);
+	router.get('/search', controller.spu.search);
 
 
 

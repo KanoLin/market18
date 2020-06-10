@@ -45,12 +45,13 @@ class SpuController extends Controller {
 	async search() {
 		const { ctx } = this;
 		const query = ctx.request.query;
-		const category_id = query.category_id || 0;
+		const category_id = query.category_id || null;
 		const keyword = query.keyword || null;
+		const top = query.top || null;
 		const page = query.page || 1;
 		const page_num = query.page_num || 4;
 
-		const { res, msg, data } = await ctx.service.spu.search(parseInt(category_id), keyword, parseInt(page), parseInt(page_num));
+		const { res, msg, data } = await ctx.service.spu.search(parseInt(category_id), keyword, parseInt(top), parseInt(page), parseInt(page_num));
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});
