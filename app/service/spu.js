@@ -44,11 +44,16 @@ class SpuService extends Service {
 		option.limit = page_num;
 		option.offset = (page - 1) * page_num;
 		const op = this.app.Sequelize.Op;
-		// if (top != null) {
-		// 	const skus = await this.ctx.model.Sku.findAll({
-		// 		attributes:[['id','spu_id'],['sku_pic','spu_pic']]
-		// 	});
-		// }
+		if (top) {
+			const skus = await this.ctx.model.Sku.findAll(Object.assign({
+				attributes: ['spu_id', [this.app.Sequelize.fn('SUM', this.app.Sequelize.col('sales')), 'sum']],
+				group:'spu_id',
+				order:this.app.Sequelize.literal('sum DESC'),
+			},option));
+			let spu_ids = [];
+			for (let sku of skus) spu_ids.push(sku.spu_id);
+			option.where = { id: { [op.in]: spu_ids } };
+		}
 
 		if (category_id) {
 			const category = await this.ctx.model.Category.findByPk(category_id);
@@ -65,16 +70,35 @@ class SpuService extends Service {
 			option.where = Object.assign(option.where || {}, { name: { [op.substring]: keyword } });
 		option.include = [{ model: this.ctx.model.Category, as: 'category' }];
 		option.attributes = [['id', 'spu_id'], 'name', 'spu_pic'];
+		if (this.ctx.request.body.off) {
+			option.paranoid = false;
+			option.where = Object.assign(option.where || {}, { deleted_at: { [this.app.Sequelize.Op.not]: null } });
+		}
 		let spus = await this.ctx.model.Spu.findAll(option);
 		if (spus == null) return { res: false, msg: '', data:{} };
 		let data = [];
 		for (let s of spus) { 
 			s = s.toJSON();
-			let ss = await this.ctx.model.Sku.findOne({ where: { spu_id: s.spu_id } });
-			s.price = ss.price;
+			let max_price = await this.ctx.model.Sku.max('price', { where: { spu_id: s.spu_id } });
+			let min_price = await this.ctx.model.Sku.min('price', { where: { spu_id: s.spu_id } });
+			let sales = await this.ctx.model.Sku.sum('sales', { where: { spu_id: s.spu_id } });
+			s.price = min_price+'-'+max_price;
 			s.category = s.category.name;
+			s.sales = sales;
 			data.push(s);
 		}
+
+		let objectArraySort = function (keyName) {
+			return function (objectN, objectM) {
+			 var valueN = objectN[keyName]
+			 var valueM = objectM[keyName]
+			 if (valueN < valueM) return 1
+			 else if (valueN > valueM) return -1
+			 else return 0
+			}
+		}
+		
+		if (top) data.sort(objectArraySort('sales'));
 		return { res: true, msg: '', data: data };
 	}
 
@@ -96,7 +120,7 @@ class SpuService extends Service {
 						{
 							model: this.ctx.model.SkuAttributeValue,
 							as: 'aavs',
-							attributes:['sku_id','attribute_id','attribute_value_id']
+							attributes: ['sku_id', 'attribute_id', 'attribute_value_id']
 						}
 					]
 				}

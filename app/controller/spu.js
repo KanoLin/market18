@@ -75,6 +75,31 @@ class SpuController extends Controller {
 		return;
 	}
 
+	async set_stock() {
+		const { ctx } = this;
+		await ctx.model.Sku.update({ stock: ctx.request.body.stock });
+		ctx.status = 200;
+		ctx.body = util.make_res(msg, 0, {});
+	}
+
+	async off_shelf() {
+		const spu=await this.ctx.model.Spu.findByPk(this.ctx.params.id);
+		if (spu) await spu.destroy();
+		this.ctx.status = 200;
+		this.ctx.body = util.make_res('', 0, {});
+	}
+
+	async put_shelf() {
+		const spu = await this.ctx.model.Spu.findOne({
+			paranoid: false,
+			where: {
+				id: parseInt(this.ctx.params.id)
+			}
+		});
+		if (spu) await spu.restore();
+		this.ctx.status = 200;
+		this.ctx.body = util.make_res('', 0, {});
+	}
 }
 
 module.exports = SpuController;

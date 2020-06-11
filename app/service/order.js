@@ -78,6 +78,7 @@ class OrderService extends Service {
 				{
 					model: this.ctx.model.OrderStatus,
 					as: 'statuses',
+					attributes: ['id', 'status', 'description', 'created_at']
 				},
 				{
 					model: this.ctx.model.Comment,
