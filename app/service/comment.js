@@ -28,20 +28,13 @@ class CommentService extends Service {
 						{
 							model: this.ctx.model.User,
 							as: 'user',
-							attribute:['id','username','avater']
+							attributes: ['id', 'username', 'avater']
 						}
 					]
 				}
 			]
-		}).then(res => {
-			if (res == []) return [];
-			res = res.toJSON();
-			for (let sku of res)
-				for (let comment of sku.comments)
-					comment.user.avater = JSON.parse(comment.user.avater);
-			return res;
 		});
-		return data;
+		return skus;
 	}
 }
 

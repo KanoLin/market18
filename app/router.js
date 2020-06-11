@@ -47,9 +47,12 @@ module.exports = app => {
 	router.get('/order/all', middleware.admin, controller.order.index);
 	router.get('/order/:id', middleware.auth, controller.order.detail);
 	router.get('/order', middleware.auth, controller.order.index_user);
-
 	router.post('/order/:id/status', middleware.admin, controller.order.status_update);
 	router.put('/order/:id/receipt', middleware.auth, controller.order.receipt);
+
+	// 评论
+	router.post('/order/:id/comment', middleware.auth, controller.comment.create);
+	router.get('/item/:spu_id/comment', controller.comment.index);
 
 
 	// 附件

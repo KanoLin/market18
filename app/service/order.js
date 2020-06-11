@@ -15,6 +15,8 @@ class OrderService extends Service {
 			price: data.price,
 			anonymous: data.anonymous
 		});
+		sku.decrement('stock');
+		sku.increment('sales');
 		return { res: true, msg: '' };
 	}
 
@@ -23,7 +25,10 @@ class OrderService extends Service {
 		for (let id of data.cart_id_list) {
 			const c = await this.ctx.model.Mycart.findByPk(id);
 			const sku = await this.ctx.model.Sku.findByPk(c.sku_id);
-			if (sku.stock == 0) sold.push(sku.name);
+			if (sku.stock == 0) {
+				sold.push(sku.name);
+				continue;
+			}
 			await this.ctx.model.Order.create({
 				sku_id: sku.id,
 				address_id: data.address_id,
@@ -32,6 +37,8 @@ class OrderService extends Service {
 				price: sku.price * c.num,
 				anonymous: data.anonymous
 			});
+			sku.decrement('stock');
+			sku.increment('sales');
 			await c.destroy();
 		}
 		if (sold.length != 0) return { res: false, msg: '部分商品售罄！', data: sold };
