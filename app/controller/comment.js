@@ -17,7 +17,7 @@ class CommentController extends Controller {
 			ctx.body = util.make_res('参数错误', 400, {});
 			return;
 		}
-		const { res, msg } = await ctx.service.comment.create(ctx.params.order_id, ctx.current_user.id, data);
+		const { res, msg } = await ctx.service.comment.create(ctx.params.id, ctx.current_user.id, ctx.request.body);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});
@@ -32,7 +32,7 @@ class CommentController extends Controller {
 		const { ctx } = this;
 		const data = await ctx.service.comment.index(ctx.params.spu_id);
 		ctx.status = 200;
-		ctx.body = util.make_res(msg, 0, { data });
+		ctx.body = util.make_res('', 0, { data });
 		return;
 	}
 	
