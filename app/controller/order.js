@@ -19,7 +19,7 @@ class OrderController extends Controller {
 			ctx.body = util.make_res('参数错误', 400, {});
 			return;
 		}
-		const { res, msg } = await ctx.service.order.create(data);
+		const { res, msg } = await ctx.service.order.create(ctx.request.body);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});
@@ -44,13 +44,13 @@ class OrderController extends Controller {
 			ctx.body = util.make_res('参数错误', 400, {});
 			return;
 		}
-		const { res, msg, data } = await ctx.service.order.create_from_cart(data);
+		const { res, msg } = await ctx.service.order.create_from_cart(ctx.request.body);
 		if (!res) {
 			ctx.status = 400;
-			ctx.body = util.make_res(msg, 400, { data });
+			ctx.body = util.make_res(msg, 400, {});
 		} else {
 			ctx.status = 200;
-			ctx.body = util.make_res(msg, 0, { data });
+			ctx.body = util.make_res(msg, 0, {});
 		}
 		return;
 	}
@@ -68,7 +68,7 @@ class OrderController extends Controller {
 			ctx.body = util.make_res('参数错误', 400, {});
 			return;
 		}
-		const { res, msg } = await ctx.service.order.status_update(ctx.params.id, ctx.request.data);
+		const { res, msg } = await ctx.service.order.status_update(ctx.params.id, ctx.request.body);
 		if (!res) {
 			ctx.status = 400;
 			ctx.body = util.make_res(msg, 400, {});
@@ -78,6 +78,14 @@ class OrderController extends Controller {
 		}
 		return;
 
+	}
+
+	async receipt() {
+		const { ctx } = this;
+		await ctx.service.order.status_update(ctx.params.id, { 'status': 3, 'description': '买家已收货' });
+		ctx.status = 200;
+		ctx.body = util.make_res('', 0, {});
+		return;
 	}
 
 	async detail() {

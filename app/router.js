@@ -41,8 +41,15 @@ module.exports = app => {
 	router.delete('/cart/:id', middleware.auth, controller.mycart.delete);
 	
 
+	// 订单
+	router.post('/order', middleware.auth, controller.order.create);
+	router.post('/order/from_cart', middleware.auth, controller.order.create_from_cart);
+	router.get('/order/all', middleware.admin, controller.order.index);
+	router.get('/order/:id', middleware.auth, controller.order.detail);
+	router.get('/order', middleware.auth, controller.order.index_user);
 
-
+	router.post('/order/:id/status', middleware.admin, controller.order.status_update);
+	router.put('/order/:id/receipt', middleware.auth, controller.order.receipt);
 
 
 	// 附件
