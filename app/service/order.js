@@ -96,7 +96,7 @@ class OrderService extends Service {
 		let attrs = ['id', 'num', 'price', 'anonymous', 'status', 'created_at'];
 		let include = [
 			{ model: this.ctx.model.User, as: 'user', attributes: ['id', 'username'] },
-			{ model: this.ctx.model.Sku, as: 'sku', attributes: ['id', 'name'] },
+			{ model: this.ctx.model.Sku, as: 'sku', attributes: ['id', 'name', 'sku_pic'] },
 		];
 		let where = { user_id: user_id };
 		let option = { attributes: attrs, where: where, include: include }
@@ -109,7 +109,7 @@ class OrderService extends Service {
 		let attrs = ['id', 'num', 'price', 'anonymous', 'status', 'created_at'];
 		let include = [
 			{ model: this.ctx.model.User, as: 'user', attributes: ['id', 'username'] },
-			{ model: this.ctx.model.Sku, as: 'sku', attributes: ['id', 'name'] },
+			{ model: this.ctx.model.Sku, as: 'sku', attributes: ['id', 'name', 'sku_pic'] },
 		];
 		let option = { attributes: attrs, include: include };
 
