@@ -91,11 +91,12 @@ class SpuService extends Service {
 				{
 					model: this.ctx.model.Sku,
 					as: 'skus',
-					attributes: ['price', 'stock', 'sku_pic', 'des_pic', 'sales'],
+					attributes: ['id', 'price', 'stock', 'sku_pic', 'des_pic', 'sales'],
 					include: [
 						{
 							model: this.ctx.model.SkuAttributeValue,
-							as: 'aavs'
+							as: 'aavs',
+							attributes:['sku_id','attribute_id','attribute_value_id']
 						}
 					]
 				}
