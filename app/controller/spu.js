@@ -77,7 +77,8 @@ class SpuController extends Controller {
 
 	async set_stock() {
 		const { ctx } = this;
-		await ctx.model.Sku.update({ stock: ctx.request.body.stock });
+		const sku = ctx.model.Sku.findByPk(ctx.params.id);
+		sku.update({ stock: ctx.request.body.stock });
 		ctx.status = 200;
 		ctx.body = util.make_res(msg, 0, {});
 	}
