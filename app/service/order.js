@@ -78,7 +78,7 @@ class OrderService extends Service {
 				{
 					model: this.ctx.model.OrderStatus,
 					as: 'statuses',
-					attributes: ['id', 'status', 'description', 'created_at']
+					attributes: ['id', 'description', 'created_at']
 				},
 				{
 					model: this.ctx.model.Comment,
@@ -88,7 +88,7 @@ class OrderService extends Service {
 			]
 		});
 		if (!order) return { res: false, msg: '订单不存在！', data: {} };
-		if (order.anonymous) delete order.user;
+		//if (order.anonymous) delete order.user;
 		return { res: true, msg: '', data: order };
 	}
 	
