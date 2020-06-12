@@ -7,10 +7,8 @@ class MycartController extends Controller {
 	async create() {
 		const { ctx } = this;
 		const rules = {
-			id: 'int',
-			address_id: 'int',
-			num: 'int',
-			anonymous:'boolean'
+			sku_id: 'int',
+			num: 'int'
 		}
 		try {
 			ctx.validate(rules);
