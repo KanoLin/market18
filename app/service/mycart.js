@@ -8,7 +8,7 @@ class MycartService extends Service {
 			address_id: data.address_id,
 			anonymous:data.anonymous,
 			user_id: user_id,
-			sku_id: data.id,
+			sku_id: data.sku_id,
 			num: data.num
 		});
 		return data;
