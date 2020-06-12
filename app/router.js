@@ -36,6 +36,7 @@ module.exports = app => {
 	router.get('/search', controller.spu.search); //搜索商品
 	router.put('/item/:id/off_shelf', middleware.admin, controller.spu.off_shelf);  // 下架商品
 	router.put('/item/:id/put_shelf', middleware.admin, controller.spu.put_shelf);  // 重新上架商品
+	router.post('/item/:id/set_stock', middleware.admin, controller.spu.set_stock);
 
 	// 购物车
 	router.post('/cart', middleware.auth, controller.mycart.create);  // 添加至购物车
